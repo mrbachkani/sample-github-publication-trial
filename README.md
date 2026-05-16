@@ -19,3 +19,4 @@ A tiny Python CLI that stores short messages in JSON.
 - Filter by due date: `python -m src.main list --due-before 2026-05-31`
 - Sort results: `python -m src.main list --sort due` or `--sort priority` or `--sort id`
 - Combined filters: `python -m src.main list --status pending --priority high --sort due`
+- Search items: `python -m src.main search "query"` (case-insensitive substring)
