@@ -163,6 +163,23 @@ def cmd_count(args):
     print(f'Done: {done}')
 
 
+def cmd_search(args):
+    todos = load()
+    query = args.query.lower()
+    matches = [t for t in todos if query in t["task"].lower()]
+    if not matches:
+        print(f"No items matched '{args.query}'.")
+        return
+    for i, t in enumerate(matches):
+        status = "x" if t.get("done") else " "
+        extra = ""
+        if "due" in t:
+            extra += f' due={t["due"]}'
+        if "priority" in t:
+            extra += f' pri={t["priority"]}'
+        print(f'  [{i}] [{status}] {t["task"]}{extra}')
+
+
 def main():
     parser = argparse.ArgumentParser(description="Tiny todo CLI")
     sub = parser.add_subparsers(dest="command")
@@ -193,6 +210,9 @@ def main():
 
     sub.add_parser("count")
 
+    p_search = sub.add_parser("search")
+    p_search.add_argument("query")
+
     args = parser.parse_args()
     if not args.command:
         parser.print_help()
@@ -200,7 +220,7 @@ def main():
 
     {"add": cmd_add, "list": cmd_list, "done": cmd_done,
      "clear-completed": cmd_clear_completed, "delete": cmd_delete,
-     "edit": cmd_edit, "count": cmd_count}[args.command](args)
+     "edit": cmd_edit, "count": cmd_count, "search": cmd_search}[args.command](args)
 
 
 if __name__ == "__main__":
