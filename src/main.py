@@ -155,6 +155,11 @@ def cmd_edit(args):
     print(f'Edited task {idx}.')
 
 
+def cmd_clear(args):
+    save([])
+    print("Cleared all items.")
+
+
 def cmd_count(args):
     todos = load()
     total = len(todos)
@@ -208,6 +213,7 @@ def main():
     p_edit.add_argument("id")
     p_edit.add_argument("text")
 
+    sub.add_parser("clear")
     sub.add_parser("count")
 
     p_search = sub.add_parser("search")
@@ -220,7 +226,7 @@ def main():
 
     {"add": cmd_add, "list": cmd_list, "done": cmd_done,
      "clear-completed": cmd_clear_completed, "delete": cmd_delete,
-     "edit": cmd_edit, "count": cmd_count, "search": cmd_search}[args.command](args)
+     "edit": cmd_edit, "clear": cmd_clear, "count": cmd_count, "search": cmd_search}[args.command](args)
 
 
 if __name__ == "__main__":
