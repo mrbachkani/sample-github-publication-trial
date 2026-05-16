@@ -8,6 +8,7 @@ A tiny Python CLI that stores short messages in JSON.
 - JSON storage
 - Mark done: `python -m src.main done 0`
 - Clear completed: `python -m src.main clear-completed`
+- Clear all: `python -m src.main clear`
 - Delete by index: `python -m src.main delete 0`
 - Edit by index: `python -m src.main edit 0 "new text"`
 - Due dates: `python -m src.main add "task" --due 2026-05-20`
