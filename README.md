@@ -14,3 +14,8 @@ A tiny Python CLI that stores short messages in JSON.
 - Priority: `python -m src.main add "task" --priority high`
 - JSON output: `python -m src.main list --json`
 - Count items: `python -m src.main count`
+- Filter by status: `python -m src.main list --status pending` or `--status completed`
+- Filter by priority: `python -m src.main list --priority high`
+- Filter by due date: `python -m src.main list --due-before 2026-05-31`
+- Sort results: `python -m src.main list --sort due` or `--sort priority` or `--sort id`
+- Combined filters: `python -m src.main list --status pending --priority high --sort due`

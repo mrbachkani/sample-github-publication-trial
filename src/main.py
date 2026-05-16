@@ -32,8 +32,61 @@ def cmd_add(args):
     print(f'Added: "{args.task}"')
 
 
+def _validate_list_args(args):
+    if getattr(args, "status", None):
+        if args.status not in ("pending", "completed"):
+            print(f'Error: invalid status "{args.status}". Choose: pending, completed', file=sys.stderr)
+            sys.exit(1)
+    if getattr(args, "priority", None):
+        if args.priority not in ("high", "medium", "low"):
+            print(f'Error: invalid priority "{args.priority}". Choose: high, medium, low', file=sys.stderr)
+            sys.exit(1)
+    if getattr(args, "sort", None):
+        if args.sort not in ("due", "priority", "id"):
+            print(f'Error: invalid sort "{args.sort}". Choose: due, priority, id', file=sys.stderr)
+            sys.exit(1)
+    if getattr(args, "due_before", None):
+        from datetime import datetime
+        try:
+            datetime.strptime(args.due_before, "%Y-%m-%d")
+        except ValueError:
+            print(f'Error: invalid date "{args.due_before}". Use YYYY-MM-DD', file=sys.stderr)
+            sys.exit(1)
+
+
 def cmd_list(args):
+    _validate_list_args(args)
     todos = load()
+
+    # Filter by status
+    if getattr(args, "status", None):
+        if args.status == "pending":
+            todos = [t for t in todos if not t.get("done")]
+        else:
+            todos = [t for t in todos if t.get("done")]
+
+    # Filter by priority
+    if getattr(args, "priority", None):
+        todos = [t for t in todos if t.get("priority") == args.priority]
+
+    # Filter by due-before
+    if getattr(args, "due_before", None):
+        todos = [t for t in todos if "due" in t and t["due"] <= args.due_before]
+
+    # Sort
+    if getattr(args, "sort", None) and args.sort != "id":
+        if args.sort == "due":
+            has_due = [t for t in todos if "due" in t]
+            no_due = [t for t in todos if "due" not in t]
+            has_due.sort(key=lambda t: t["due"])
+            todos = has_due + no_due
+        elif args.sort == "priority":
+            order = {"high": 0, "medium": 1, "low": 2}
+            with_pri = [t for t in todos if "priority" in t]
+            no_pri = [t for t in todos if "priority" not in t]
+            with_pri.sort(key=lambda t: order.get(t["priority"], 3))
+            todos = with_pri + no_pri
+
     if getattr(args, "json", False):
         print(json.dumps(todos, indent=2))
         return
@@ -121,6 +174,10 @@ def main():
 
     p_list = sub.add_parser("list")
     p_list.add_argument("--json", action="store_true")
+    p_list.add_argument("--status")
+    p_list.add_argument("--priority")
+    p_list.add_argument("--due-before", dest="due_before")
+    p_list.add_argument("--sort")
 
     p_done = sub.add_parser("done")
     p_done.add_argument("id")
