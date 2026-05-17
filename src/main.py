@@ -225,6 +225,7 @@ def main():
     sub.add_parser("clear")
     sub.add_parser("count")
     sub.add_parser("empty")
+    sub.add_parser("item-count")
 
     p_search = sub.add_parser("search")
     p_search.add_argument("query")
@@ -237,6 +238,7 @@ def main():
     {"add": cmd_add, "list": cmd_list, "done": cmd_done,
      "clear-completed": cmd_clear_completed, "delete": cmd_delete,
      "edit": cmd_edit, "clear": cmd_clear, "count": cmd_count, "empty": cmd_empty,
+     "item-count": cmd_count,
      "search": cmd_search}[args.command](args)
 
 
