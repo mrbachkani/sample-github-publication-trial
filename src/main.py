@@ -160,6 +160,15 @@ def cmd_clear(args):
     print("Cleared all items.")
 
 
+def cmd_empty(args):
+    todos = load()
+    total = len(todos)
+    if total == 0:
+        print("Store is empty (0 items)")
+    else:
+        print(f"Store is NOT empty ({total} items)")
+
+
 def cmd_count(args):
     todos = load()
     total = len(todos)
@@ -215,6 +224,7 @@ def main():
 
     sub.add_parser("clear")
     sub.add_parser("count")
+    sub.add_parser("empty")
 
     p_search = sub.add_parser("search")
     p_search.add_argument("query")
@@ -226,7 +236,8 @@ def main():
 
     {"add": cmd_add, "list": cmd_list, "done": cmd_done,
      "clear-completed": cmd_clear_completed, "delete": cmd_delete,
-     "edit": cmd_edit, "clear": cmd_clear, "count": cmd_count, "search": cmd_search}[args.command](args)
+     "edit": cmd_edit, "clear": cmd_clear, "count": cmd_count, "empty": cmd_empty,
+     "search": cmd_search}[args.command](args)
 
 
 if __name__ == "__main__":
