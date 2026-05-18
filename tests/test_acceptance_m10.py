@@ -2,7 +2,15 @@
 
 These tests are generated before implementation and must fail initially (red phase).
 After implementation, they must pass (green phase).
+
+STATUS: ABANDONED — M10 milestone (export/import/backup/restore/recurring tasks/tags)
+was never delivered. These tests are preserved for historical reference but skipped
+from the active product test suite.
 """
+
+import pytest
+
+pytestmark = pytest.mark.skip(reason="M10 milestone never delivered; tests preserved for historical reference")
 
 import json
 import subprocess

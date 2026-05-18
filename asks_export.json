@@ -1,0 +1,10 @@
+[
+  {
+    "task": "First task",
+    "done": false
+  },
+  {
+    "task": "Second task",
+    "done": false
+  }
+]
