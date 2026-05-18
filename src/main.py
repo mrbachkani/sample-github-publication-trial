@@ -177,6 +177,12 @@ def cmd_count(args):
     print(f'Done: {done}')
 
 
+def cmd_has_items(args):
+    todos = load()
+    total = len(todos)
+    print(f"Items: {total}")
+
+
 def cmd_search(args):
     todos = load()
     query = args.query.lower()
@@ -192,6 +198,20 @@ def cmd_search(args):
         if "priority" in t:
             extra += f' pri={t["priority"]}'
         print(f'  [{i}] [{status}] {t["task"]}{extra}')
+
+
+EXPORT_FILE = Path(__file__).resolve().parent.parent / "asks_export.json"
+
+
+def cmd_export(args):
+    todos = load()
+    total = len(todos)
+    with open(EXPORT_FILE, "w", encoding="utf-8") as f:
+        json.dump(todos, f, indent=2)
+    if total == 0:
+        print(f"Exported 0 items to {EXPORT_FILE.name}")
+    else:
+        print(f"Exported {total} items to {EXPORT_FILE.name}")
 
 
 def main():
@@ -226,9 +246,12 @@ def main():
     sub.add_parser("count")
     sub.add_parser("empty")
     sub.add_parser("item-count")
+    sub.add_parser("has-items")
 
     p_search = sub.add_parser("search")
     p_search.add_argument("query")
+
+    sub.add_parser("export")
 
     args = parser.parse_args()
     if not args.command:
@@ -238,8 +261,8 @@ def main():
     {"add": cmd_add, "list": cmd_list, "done": cmd_done,
      "clear-completed": cmd_clear_completed, "delete": cmd_delete,
      "edit": cmd_edit, "clear": cmd_clear, "count": cmd_count, "empty": cmd_empty,
-     "item-count": cmd_count,
-     "search": cmd_search}[args.command](args)
+     "item-count": cmd_count, "has-items": cmd_has_items,
+     "search": cmd_search, "export": cmd_export}[args.command](args)
 
 
 if __name__ == "__main__":
