@@ -25,3 +25,4 @@ A tiny Python CLI that stores short messages in JSON.
 - Search items: `python -m src.main search "query"` (case-insensitive substring)
 - Has items: `python -m src.main has-items` (prints total number of stored items)
 - Export to JSON: `python -m src.main export` (writes all tasks to `asks_export.json`)
+- Import from JSON: `python -m src.main import tasks.json` (imports tasks from a JSON file)
