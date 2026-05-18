@@ -214,6 +214,27 @@ def cmd_export(args):
         print(f"Exported {total} items to {EXPORT_FILE.name}")
 
 
+def cmd_import(args):
+    import_path = Path(args.file)
+    if not import_path.exists():
+        print(f"Error: file not found: {import_path}", file=sys.stderr)
+        sys.exit(1)
+    try:
+        with open(import_path, encoding="utf-8") as f:
+            imported = json.load(f)
+    except json.JSONDecodeError:
+        print("Error: invalid JSON — failed to parse file", file=sys.stderr)
+        sys.exit(1)
+    if not isinstance(imported, list):
+        print("Error: invalid JSON — expected a list of tasks", file=sys.stderr)
+        sys.exit(1)
+    todos = load()
+    count = len(imported)
+    todos.extend(imported)
+    save(todos)
+    print(f"Imported {count} tasks.")
+
+
 def main():
     parser = argparse.ArgumentParser(description="Tiny todo CLI")
     sub = parser.add_subparsers(dest="command")
@@ -253,6 +274,9 @@ def main():
 
     sub.add_parser("export")
 
+    p_import = sub.add_parser("import")
+    p_import.add_argument("file")
+
     args = parser.parse_args()
     if not args.command:
         parser.print_help()
@@ -262,7 +286,8 @@ def main():
      "clear-completed": cmd_clear_completed, "delete": cmd_delete,
      "edit": cmd_edit, "clear": cmd_clear, "count": cmd_count, "empty": cmd_empty,
      "item-count": cmd_count, "has-items": cmd_has_items,
-     "search": cmd_search, "export": cmd_export}[args.command](args)
+     "search": cmd_search, "export": cmd_export,
+     "import": cmd_import}[args.command](args)
 
 
 if __name__ == "__main__":
