@@ -195,6 +195,14 @@ def cmd_pending_count(args):
     print(f"Pending count: {pending}")
 
 
+def cmd_task_summary_json(args):
+    todos = load()
+    total = len(todos)
+    done = sum(1 for t in todos if t.get("done"))
+    summary = {"total": total, "completed": done, "pending": total - done}
+    print(json.dumps(summary, indent=2))
+
+
 def cmd_search(args):
     todos = load()
     query = args.query.lower()
@@ -283,6 +291,7 @@ def main():
     sub.add_parser("item-summary")
     sub.add_parser("completed-count")
     sub.add_parser("pending-count")
+    sub.add_parser("task-summary-json")
 
     p_search = sub.add_parser("search")
     p_search.add_argument("query")
@@ -303,7 +312,8 @@ def main():
      "item-count": cmd_count, "has-items": cmd_has_items, "item-summary": cmd_count,
      "completed-count": cmd_completed_count, "pending-count": cmd_pending_count,
      "search": cmd_search, "export": cmd_export,
-     "import": cmd_import}[args.command](args)
+     "import": cmd_import,
+     "task-summary-json": cmd_task_summary_json}[args.command](args)
 
 
 if __name__ == "__main__":
