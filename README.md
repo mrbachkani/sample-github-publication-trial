@@ -28,3 +28,4 @@ A tiny Python CLI that stores short messages in JSON.
 - Import from JSON: `python -m src.main import tasks.json` (imports tasks from a JSON file)
 - Item summary: `python -m src.main item-summary` (prints total and completed item counts)
 - Completed count: `python -m src.main completed-count` (prints number of completed tasks)
+- Pending count: `python -m src.main pending-count` (prints number of pending tasks)

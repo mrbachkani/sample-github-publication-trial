@@ -189,6 +189,12 @@ def cmd_completed_count(args):
     print(f"Completed count: {total}")
 
 
+def cmd_pending_count(args):
+    todos = load()
+    pending = sum(1 for t in todos if not t.get("done"))
+    print(f"Pending count: {pending}")
+
+
 def cmd_search(args):
     todos = load()
     query = args.query.lower()
@@ -276,6 +282,7 @@ def main():
     sub.add_parser("has-items")
     sub.add_parser("item-summary")
     sub.add_parser("completed-count")
+    sub.add_parser("pending-count")
 
     p_search = sub.add_parser("search")
     p_search.add_argument("query")
@@ -294,7 +301,7 @@ def main():
      "clear-completed": cmd_clear_completed, "delete": cmd_delete,
      "edit": cmd_edit, "clear": cmd_clear, "count": cmd_count, "empty": cmd_empty,
      "item-count": cmd_count, "has-items": cmd_has_items, "item-summary": cmd_count,
-     "completed-count": cmd_completed_count,
+     "completed-count": cmd_completed_count, "pending-count": cmd_pending_count,
      "search": cmd_search, "export": cmd_export,
      "import": cmd_import}[args.command](args)
 
